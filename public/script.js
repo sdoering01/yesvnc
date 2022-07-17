@@ -65,6 +65,13 @@ function stopCapture(evt) {
     video.srcObject = null;
 }
 
+function onStop() {
+    stopCapture();
+    start.removeAttribute('disabled');
+    stopButton.setAttribute('disabled', '');
+    window.location.reload();
+}
+
 const startButton = document.getElementById('start');
 const stopButton = document.getElementById('stop');
 
@@ -78,16 +85,7 @@ startButton.addEventListener(
     false
 );
 
-stopButton.addEventListener(
-    'click',
-    function (evt) {
-        stopCapture();
-        start.removeAttribute('disabled');
-        stopButton.setAttribute('disabled', '');
-        window.location.reload();
-    },
-    false
-);
+stopButton.addEventListener('click', onStop, false);
 
 let socket = undefined;
 
@@ -1162,6 +1160,13 @@ document.addEventListener('DOMContentLoaded', function () {
             socket = new WebSocket(`${protocol}://${host}${path}`, ['binary', 'base64']);
             socket.binaryType = 'arraybuffer';
             socket.addEventListener('open', rfbConnect);
+            socket.addEventListener('close', (event) => {
+                if (debugging) console.log('socket closed', event);
+                alert(
+                    'Error: Connection to server lost\n\nThis could mean that there is someone transmitting their screen already, if you just started the transmission just now.'
+                );
+                onStop();
+            });
         },
         false
     );
