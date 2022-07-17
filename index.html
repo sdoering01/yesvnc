@@ -1239,7 +1239,9 @@
         socket.addEventListener ("message", rfbSecurityHandshake);
         if (debugging)
           console.log ("sending: RFB 003.008\\n");
-        socket.send ("RFB 003.008\n");
+        let utf8Encode = new TextEncoder ();
+        const buffer = utf8Encode.encode ("RFB 003.008\n");
+        socket.send (buffer);
       }
 
       document.addEventListener ("DOMContentLoaded",
