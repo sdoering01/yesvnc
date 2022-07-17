@@ -1,4 +1,4 @@
-const debugging = 1;
+const debugging = 0;
 
 const urlParams = new URLSearchParams(window.location.search);
 const host = urlParams.get('host') || window.location.host;
