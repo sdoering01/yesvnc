@@ -1,3 +1,5 @@
+const debugging = 1;
+
 const urlParams = new URLSearchParams(window.location.search);
 const host = urlParams.get('host') || window.location.host;
 const path = urlParams.get('path') || '/';
@@ -9,7 +11,12 @@ if (channel) {
 }
 const secure = urlParams.get('secure') !== 'false';
 
-const debugging = 1;
+if (debugging) {
+    console.log('host', host);
+    console.log('path', path);
+    console.log('channel', channel);
+    console.log('secure', secure);
+}
 
 const combine_rects_x_min_distance = 24;
 const combine_rects_y_min_distance = 4;
