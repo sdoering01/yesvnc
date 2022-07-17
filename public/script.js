@@ -1,3 +1,14 @@
+const urlParams = new URLSearchParams(window.location.search);
+const host = urlParams.get('host') || window.location.host;
+const path = urlParams.get('path') || '/';
+const channel = urlParams.get('channel');
+if (channel) {
+    const roomIndicator = document.getElementById('room-indicator');
+    roomIndicator.innerText = `Channel ${channel}`;
+    roomIndicator.classList.remove('hidden');
+}
+const secure = urlParams.get('secure') !== 'false';
+
 const debugging = 1;
 
 const combine_rects_x_min_distance = 24;
@@ -1140,8 +1151,8 @@ document.addEventListener('DOMContentLoaded', function () {
             ctx0.fillStyle = 'black';
             ctx0.fill();
             if (debugging) console.log('Opening WebSocket ...');
-            // socket = new WebSocket ("wss://streaming.cvh-server.de/websock/wc-6/", ['binary', 'base64']);
-            socket = new WebSocket('ws://localhost:3010', ['binary', 'base64']);
+            let protocol = secure ? 'wss' : 'ws';
+            socket = new WebSocket(`${protocol}://${host}${path}`, ['binary', 'base64']);
             socket.binaryType = 'arraybuffer';
             socket.addEventListener('open', rfbConnect);
         },
